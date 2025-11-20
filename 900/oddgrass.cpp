@@ -7,10 +7,30 @@ int main() {
   while (tt--) {
     long long x, j;
     cin >> x >> j;
+    if (j == 0) {
+      cout << x << '\n';
+      continue;
+    }
     if (x % 2 == 0) {
-      j % 2 ? cout << x - j / 2 : cout << x - (long long)(j + 1) / 2;
+      if (j % 4 == 0) {
+        cout << x << '\n';
+      } else if (j % 4 == 1) {
+        cout << x - j << '\n';
+      } else if (j % 4 == 2) {
+        cout << x + 1 << '\n';
+      } else {
+        cout << x + 1 + j << '\n';
+      }
     } else {
-      j % 2 != 0 ? cout << x - j / 2 : cout << x - (long long)(j + 1) / 2;
+      if (j % 4 == 0) {
+        cout << x << '\n';
+      } else if (j % 4 == 1) {
+        cout << x + j << '\n';
+      } else if (j % 4 == 2) {
+        cout << x - 1 << '\n';
+      } else {
+        cout << x - 1 - j << '\n';
+      }
     }
   }
 }
