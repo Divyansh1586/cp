@@ -5,61 +5,54 @@
 
 using namespace std;
 
-vector<vector<vector<int>>> constructAdj(vector<vector<int>> &edges, int V)
-{
-    vector<vector<vector<int>>> adj(V);
-    for (const auto &edge : edges)
-    {
-        int u = edge[0];
-        int v = edge[1];
-        int w = edge[2];
-
-        adj[u].push_back({v, w});
-        adj[v].push_back({u, w});
-    }
-    return adj;
-}
-
-vector<int> dijkstra(int v, vector<vector<int>> edges, int src)
-{
-    vector<vector<vector<int>>> adj = constructAdj(edges, v);
-
-    priority_queue<vector<int>, vector<vector<int>>, greater<vector<int>>> pq;
-    vector<int> dist(v, INT_MAX);
-
-    pq.push({0, src});
+vector <int> dijkstra(int v, vector <vector <pair <int, int>>> &adj, int src){
+    vector <int> dist(v, INT_MAX);
+    priority_queue <pair <int, int>, vector <pair <int, int>>, greater <pair <int, int>>> pq;
 
     dist[src] = 0;
-    while (!pq.empty())
-    {
-        int u = pq.top()[1];
+    pq.push({src, 0});
+
+    while(!pq.empty()){
+        int node = pq.top().first;
+        int curDist = pq.top().second;
         pq.pop();
 
-        for (auto x : adj[u])
-        {
-            int vv = x[0];
-            int weight = x[1];
+        for(auto it: adj[node]){
+            int adjNode = it.first;
+            int weight = it.second;
 
-            if (dist[vv] > dist[u] + weight)
-            {
-                dist[vv] = dist[u] + weight;
-                pq.push({dist[vv], vv});
+            if(curDist + weight < dist[adjNode]){
+                dist[adjNode] = curDist + weight;
+                pq.push({adjNode, dist[adjNode]});
             }
         }
     }
+   
 
     return dist;
 }
 
-int main()
-{
+int main(){
     int v = 5;
+
+    vector <vector <pair <int, int>>> adj(v);
+
+    adj[0].push_back({1,2});
+    adj[0].push_back({2,4});
+
+    adj[1].push_back({2,1});
+    adj[1].push_back({3,7});
+
+    adj[2].push_back({4,3});
+
+    adj[3].push_back({4,1});
+
     int src = 0;
 
-    vector<vector<int>> edges = {{0, 1, 4}, {0, 2, 8}, {1, 4, 6}, {2, 3, 2}, {3, 4, 10}};
+    vector <int> dist = dijkstra(v, adj, src);
 
-    vector<int> result = dijkstra(v, edges, src);
+    for(int i = 0; i < v; i++){
+        cout << dist[i] << " ";
+    }
 
-    for (int dist : result)
-        cout << dist << " ";
 }
